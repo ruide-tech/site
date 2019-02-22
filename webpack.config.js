@@ -32,7 +32,17 @@ module.exports = (env, argv) => {
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         'css-loader',
-                        'postcss-loader',
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                ident: 'postcss',
+                                plugins: [
+                                  require('autoprefixer')({}),
+                                  require('postcss-nested')({}),
+                                  require('cssnano')({ preset: 'default' })
+                                ],
+                            }
+                        },
                     ],
                 },
                 {
@@ -53,6 +63,14 @@ module.exports = (env, argv) => {
         plugins: [
             new HtmlWebpackPlugin({
                 template: './index.html',
+                minify: devMode ? false : {
+                    collapseWhitespace: true,
+                    removeComments: true,
+                    removeRedundantAttributes: true,
+                    removeScriptTypeAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                    useShortDoctype: true
+                },
             }),
             new MiniCssExtractPlugin({
                 filename: 'css/main-[contenthash].css',
