@@ -30,7 +30,12 @@ module.exports = (env, argv) => {
                 {
                     test: /\.css$/,
                     use: [
-                        devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                        {
+                            loader: devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                            options: {
+                                publicPath: '../',
+                            },
+                        },
                         'css-loader',
                         {
                             loader: 'postcss-loader',
